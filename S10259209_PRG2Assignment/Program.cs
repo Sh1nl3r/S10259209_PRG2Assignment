@@ -1,5 +1,10 @@
-﻿using S10259209_PRG2Assignment;
+﻿//==========================================================
+// Student Number : S10259209
+// Student Name : Chan Shin Ler
+// Partner Name : Goh Yong Ze
+//==========================================================
 
+using S10259209_PRG2Assignment;
 
 Dictionary<string, Airline> AirlinesDict = new Dictionary<string, Airline>();
 Dictionary<string, BoardingGate> BoardingGateDict = new Dictionary<string, BoardingGate>();
