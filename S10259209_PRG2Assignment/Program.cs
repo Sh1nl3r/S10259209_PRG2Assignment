@@ -88,6 +88,18 @@ void displaymenu()
     Console.WriteLine("0. Exit");
 }
 
+// Feature 3
+void option1()
+{
+    Console.WriteLine("=============================================");
+    Console.WriteLine("List of Flights for Changi Airport Terminal 5");
+    Console.WriteLine("=============================================");
+    Console.WriteLine($"{"Flight Number",-16}{"Airline Name",-23}{"Origin",-23}{"Destination",-17}{"Expected Departure/Arrival Time",-31}");
+    foreach (Flight i in FlightDict.Values)
+    {
+        Console.WriteLine($"{i.FlightNumber,-16}{AirlinesDict[$"{i.FlightNumber[0]}" + $"{i.FlightNumber[1]}"].Name,-23}{i.Origin,-23}{i.Destination,-17}{i.ExpectedTime,-31}");
+    }
+}
 
 // Feature 4
 void option2()
