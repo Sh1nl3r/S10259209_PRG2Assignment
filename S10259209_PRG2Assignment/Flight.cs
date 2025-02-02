@@ -6,13 +6,14 @@
 
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.Design;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace S10259209_PRG2Assignment
 {
-    internal class Flight
+    internal class Flight : IComparable<Flight>
     {
         public string FlightNumber { get; set; }
         public string Origin { get; set; }
@@ -20,27 +21,30 @@ namespace S10259209_PRG2Assignment
         public DateTime ExpectedTime { get; set; }
         public string Status { get; set; }
 
-        public Flight() { }
         public Flight(string flightNumber, string origin, string destination, DateTime expectedTime, string status)
         {
             this.FlightNumber = flightNumber;
             this.Origin = origin;
             this.Destination = destination;
             this.ExpectedTime = expectedTime;
-            if (status == "")
+            if (status == "" || status == "NONE")
             {
-                this.Status = "None";
+                status = "Scheduled";
+                this.Status = status;
             }
             else
             {
                 this.Status = status;
             }
-
         }
 
         public virtual double CalculateFees()
         {
             return 0;
+        }
+        public int CompareTo(Flight other)
+        {
+            return this.ExpectedTime.CompareTo(other.ExpectedTime);
         }
         public override string ToString()
         {

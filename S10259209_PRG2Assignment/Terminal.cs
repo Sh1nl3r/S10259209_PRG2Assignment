@@ -76,5 +76,6 @@ namespace S10259209_PRG2Assignment
         {
             return TerminalName;
         }
+
     }
 }
