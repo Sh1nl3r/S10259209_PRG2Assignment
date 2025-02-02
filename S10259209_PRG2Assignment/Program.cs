@@ -6,6 +6,7 @@
 
 using S10259209_PRG2Assignment;
 using System.Globalization;
+using System.Text.RegularExpressions;
 
 Dictionary<string, Airline> AirlinesDict = new Dictionary<string, Airline>();
 Dictionary<string, BoardingGate> BoardingGateDict = new Dictionary<string, BoardingGate>();
@@ -239,21 +240,126 @@ void option3()
     }
 }
 
+// Feature 6    
+void option4()
+{
+    string flightnumber;
+    Regex flightPattern = new Regex(@"^[A-Z]{2}\s\d+$");
+    bool addflight = true;
+    while (addflight)
+    {
+        do
+        {
+            Console.Write("Enter flight number: ");
+            flightnumber = Console.ReadLine().ToUpper();
 
+            if (string.IsNullOrEmpty(flightnumber))
+            {
+                Console.WriteLine("Invalid Input!");
+            }
+            else if (!flightPattern.IsMatch(flightnumber))
+            {
+                Console.WriteLine("Invalid format! (ex: MH 298)");
+                flightnumber = "";
+            }
+            else if (FlightDict.ContainsKey(flightnumber))
+            {
+                Console.WriteLine("Flight number already exists! Try again.");
+                flightnumber = "";
+            }
+        } while (string.IsNullOrEmpty(flightnumber));
 
+        string pattern = @"^[a-zA-Z\s]+ \([A-Z]{3}\)$";
 
+        string origin;
+        do
+        {
+            Console.Write("Origin (ex: Singapore (SIN)): ");
+            origin = Console.ReadLine();
 
+            if (string.IsNullOrEmpty(origin) || !Regex.IsMatch(origin, pattern))
+            {
+                Console.WriteLine("Invalid Input!");
+            }
+        } while (string.IsNullOrEmpty(origin) || !Regex.IsMatch(origin, pattern));
 
+        string destination;
+        do
+        {
+            Console.Write("Destination (ex: Singapore (SIN)): ");
+            destination = Console.ReadLine();
 
+            if (string.IsNullOrEmpty(destination) || !Regex.IsMatch(destination, pattern))
+            {
+                Console.WriteLine("Invalid Input!");
+            }
+        } while (string.IsNullOrEmpty(destination) || !Regex.IsMatch(destination, pattern));
 
+        bool validInput = false;
+        DateTime expectedtime = DateTime.MinValue;
+        while (!validInput)
+        {
+            try
+            {
+                Console.WriteLine("Expected Departure/Arrival Time (dd/MM/yyyy HH:mm): ");
+                string i = Console.ReadLine();
+                expectedtime = DateTime.ParseExact(i, "d/M/yyyy HH:mm", CultureInfo.InvariantCulture);
+                validInput = true;
+            }
+            catch (FormatException)
+            {
+                Console.WriteLine("Invalid Format! Try again.");
+            }
+            catch (Exception)
+            {
+                Console.WriteLine("Invalid Input! Try again.");
+            }
+        }
 
+        string specialrequest;
+        string[] validreq = { "CFFT", "DDJB", "LWTT", "NONE" };
+        do
+        {
+            Console.WriteLine("Enter Special Request Code (CFFT/DDJB/LWTT/None): ");
+            specialrequest = Console.ReadLine().ToUpper();
+            if (!validreq.Contains(specialrequest))
+            {
+                Console.WriteLine("Invalid Input! Try again.");
+            }
+        } while (!validreq.Contains(specialrequest));
 
+        Flight newflight;
+        if (specialrequest == "LWTT")
+        {
+            newflight = new LWTTFlight(flightnumber, origin, destination, expectedtime, "Scheduled", 500.00);
+        }
+        else if (specialrequest == "DDJB")
+        {
+            newflight = new DDJBFlight(flightnumber, origin, destination, expectedtime, "Scheduled", 300.00);
+        }
+        else if (specialrequest == "CFFT")
+        {
+            newflight = new CFFTFlight(flightnumber, origin, destination, expectedtime, "Scheduled", 150.00);
+        }
+        else
+        {
+            newflight = new Flight(flightnumber, origin, destination, expectedtime, "Scheduled");
+        }
 
+        FlightRequestCode.Add(flightnumber, specialrequest);
+        FlightDict.Add(flightnumber, newflight);
+        File.AppendAllText("flights.csv", $"{newflight.FlightNumber},{newflight.Origin},{newflight.Destination},{newflight.ExpectedTime},{specialrequest}\n");
 
+        Console.WriteLine($"Flight {flightnumber} has been added!");
 
-
-
-
+        Console.WriteLine("Would you like to add another flight? (Y/N)");
+        string ans = Console.ReadLine().ToUpper();
+        if (ans != "Y")
+        {
+            addflight = false;
+        }
+    }
+}
 
 // Feature 7
 void option5()
