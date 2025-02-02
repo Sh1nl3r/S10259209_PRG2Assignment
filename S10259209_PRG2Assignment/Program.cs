@@ -813,6 +813,62 @@ void option9()
     }
 }
 
+//Additional Feature 1
+void option10()
+{
+    Console.WriteLine("=============================================");
+    Console.WriteLine("Search Flights by Destination or Origin");
+    Console.WriteLine("=============================================");
+
+    string flightType;
+    do
+    {
+        Console.Write("Search for Arrival or Departure flights? (A/D): ");
+        flightType = Console.ReadLine().ToUpper();
+
+        if (flightType != "A" && flightType != "D")
+        {
+            Console.WriteLine("Invalid input!");
+        }
+    } while (flightType != "A" && flightType != "D");
+
+    string location;
+    do
+    {
+        Console.Write("Enter location (ex: Singapore (SIN)): ");
+        location = Console.ReadLine();
+
+        if (!System.Text.RegularExpressions.Regex.IsMatch(location, @"^[A-Za-z\s]+\s\([A-Z]{3}\)$"))
+        {
+            Console.WriteLine("Invalid format!");
+        }
+    } while (!System.Text.RegularExpressions.Regex.IsMatch(location, @"^[A-Za-z\s]+\s\([A-Z]{3}\)$"));
+
+    List<Flight> matchFlights = new List<Flight>();
+    foreach (Flight f in FlightDict.Values)
+    {
+        if ((flightType == "A" && f.Destination == location) ||
+            (flightType == "D" && f.Origin == location))
+        {
+            matchFlights.Add(f);
+        }
+    }
+
+    if (matchFlights.Count > 0)
+    {
+        Console.WriteLine("Flights found:");
+        foreach (Flight i in matchFlights)
+        {
+            Console.WriteLine($"{"Flight Number",-16}{"Airline Name",-23}{"Origin",-23}{"Destination",-17}{"Expected Departure/Arrival Time",-32}{"Status"}");
+            Console.WriteLine($"{i.FlightNumber,-16}{AirlinesDict[$"{i.FlightNumber[0]}" + $"{i.FlightNumber[1]}"].Name,-23}{i.Origin,-23}{i.Destination,-17}{i.ExpectedTime,-32}{i.Status,-10}");
+        }
+    }
+    else
+    {
+        Console.WriteLine("No flights found.");
+    }
+}
+
 //Additional Feature 2
 void option11()
 {
