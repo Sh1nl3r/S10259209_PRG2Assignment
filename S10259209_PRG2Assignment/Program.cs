@@ -36,6 +36,8 @@ using (StreamReader sr = new StreamReader("boardinggates.csv"))
         BoardingGateDict.Add(data[0], new BoardingGate(data[0], bool.Parse(data[1]), bool.Parse(data[2]), bool.Parse(data[3])));
     }
 }
+
+// Feature 2
 using (StreamReader sr = new StreamReader("flights.csv"))
 {
     sr.ReadLine();
@@ -66,7 +68,6 @@ using (StreamReader sr = new StreamReader("flights.csv"))
         }
     }
 }
-
 
 void displaymenu()
 {
