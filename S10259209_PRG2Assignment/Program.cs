@@ -494,3 +494,154 @@ void option9()
         }
     }
 }
+
+
+
+
+
+//Additional Feature 2
+void option11()
+{
+    Console.WriteLine("=============================================");
+    Console.WriteLine("Daily Flight Report");
+    Console.WriteLine("=============================================");
+
+    int totalFlights = FlightDict.Count;
+    int onTime = 0;
+    int delayed = 0;
+    int cancelled = 0;
+
+    foreach (var flight in FlightDict.Values)
+    {
+        switch (flight.Status.ToLower())
+        {
+            case "scheduled":
+                onTime++;
+                break;
+            case "delayed":
+                delayed++;
+                break;
+        }
+    }
+    foreach (var flight in cancelledList)
+    {
+        cancelled++;
+        totalFlights++;
+    }
+
+    Console.WriteLine($"Total Active Flights: {totalFlights}");
+    Console.WriteLine($"On Time: {onTime} | Delayed: {delayed} | Cancelled: {cancelled}");
+    Console.WriteLine("=============================================");
+    Console.WriteLine("Flight Status Percentages");
+    Console.WriteLine($"On Time: {(double)onTime / totalFlights * 100:F2}% | Delayed: {(double)delayed / totalFlights * 100:F2}% | Cancelled: {(double)cancelled / totalFlights * 100:F2}%");
+    Console.WriteLine("=============================================");
+
+    Console.WriteLine("1. Show Flight Report by Airline");
+    Console.WriteLine("2. Show Cancelled Flights by Airline");
+    string option = Console.ReadLine();
+
+    if (option == "1")
+    {
+        Console.WriteLine("=============================================");
+        Console.WriteLine("List of Airlines for Changi Airport Terminal 5");
+        Console.WriteLine("=============================================");
+        Console.WriteLine($"{"Airline Code",-16}{"Airline Name"}");
+        foreach (Airline i in AirlinesDict.Values)
+        {
+            Console.WriteLine($"{i.Code,-16}{i.Name}");
+        }
+        Console.WriteLine("Enter Airline Code: ");
+        string airlinecode = Console.ReadLine().ToUpper();
+        if (AirlinesDict.ContainsKey(airlinecode))
+        {
+            int numofflights = 0;
+            int ontimef = 0;
+            int delayedf = 0;
+            int cancelledf = 0;
+            Airline airline = AirlinesDict[airlinecode];
+            foreach (Flight flight in FlightDict.Values)
+            {
+                if ($"{flight.FlightNumber[0]}" + $"{flight.FlightNumber[1]}" == airlinecode)
+                {
+                    numofflights++;
+                    switch (flight.Status.ToLower())
+                    {
+                        case "scheduled":
+                            ontimef++;
+                            break;
+                        case "delayed":
+                            delayedf++;
+                            break;
+                    }
+                }
+            }
+
+            foreach (var flight in cancelledList)
+            {
+                if (flight.FlightNumber.StartsWith(airlinecode, StringComparison.OrdinalIgnoreCase))
+                {
+                    cancelledf++;
+                    numofflights++;
+                }
+            }
+
+            Console.WriteLine();
+            Console.WriteLine($"Airline: {airline.Name}");
+            Console.WriteLine("=============================================");
+            Console.WriteLine($"Total Flights: {numofflights}");
+            Console.WriteLine($"On Time: {ontimef} | Delayed: {delayedf} | Cancelled: {cancelledf}");
+            Console.WriteLine($"On Time: {(double)ontimef / numofflights * 100:F2}% | Delayed: {(double)delayedf / numofflights * 100:F2}% | Cancelled: {(double)cancelledf / numofflights * 100:F2}%");
+            Console.WriteLine("=============================================");
+        }
+        else
+        {
+            Console.WriteLine("Invalid Input!");
+        }
+    }
+    else if (option == "2")
+    {
+        Console.WriteLine("=============================================");
+        Console.WriteLine("List of Airlines for Changi Airport Terminal 5");
+        Console.WriteLine("=============================================");
+        Console.WriteLine($"{"Airline Code",-16}{"Airline Name"}");
+        foreach (Airline i in AirlinesDict.Values)
+        {
+            Console.WriteLine($"{i.Code,-16}{i.Name}");
+        }
+        Console.WriteLine("Enter Airline Code: ");
+        string airlinecode = Console.ReadLine().ToUpper();
+        if (AirlinesDict.ContainsKey(airlinecode))
+        {
+            if (cancelledList.Count == 0)
+            {
+                Console.WriteLine("No Cancelled Flights!");
+            }
+            else
+            {
+                Console.WriteLine(" ");
+                Console.WriteLine("=============================================");
+                Console.WriteLine($"Airline: {AirlinesDict[airlinecode].Name}");
+                Console.WriteLine("=============================================");
+                foreach (var flight in cancelledList)
+                {
+                    if (flight.FlightNumber.StartsWith(airlinecode, StringComparison.OrdinalIgnoreCase))
+                    {
+                        Console.WriteLine($"Flight Number: {flight.FlightNumber}");
+                        Console.WriteLine($"Origin: {flight.Origin}");
+                        Console.WriteLine($"Destination: {flight.Destination}");
+                        Console.WriteLine($"Expected Time: {flight.ExpectedTime}");
+                        Console.WriteLine("=============================================");
+                    }
+                }
+            }
+        }
+        else
+        {
+            Console.WriteLine("Invalid Input!");
+        }
+    }
+    else
+    {
+        Console.WriteLine("Invalid Input!");
+    }
+}
