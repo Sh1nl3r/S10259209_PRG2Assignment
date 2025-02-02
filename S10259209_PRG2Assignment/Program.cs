@@ -102,3 +102,73 @@ void option2()
         }
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// Feature 7
+void option5()
+{
+    Console.WriteLine("=============================================");
+    Console.WriteLine("List of Airlines for Changi Airport Terminal 5");
+    Console.WriteLine("=============================================");
+    Console.WriteLine($"{"Airline Code",-16}{"Airline Name"}");
+    foreach (Airline i in AirlinesDict.Values)
+    {
+        Console.WriteLine($"{i.Code,-16}{i.Name}");
+    }
+    Console.WriteLine("Enter Airline Code: ");
+    string airlinecode = Console.ReadLine().ToUpper();
+    if (AirlinesDict.ContainsKey(airlinecode))
+    {
+        Airline selectAirline = AirlinesDict[airlinecode];
+
+        Console.WriteLine("=============================================");
+        Console.WriteLine($"List of Flights for {selectAirline.Name}");
+        Console.WriteLine("=============================================");
+        Console.WriteLine($"{"Flight Number",-16}{"Airline Name",-23}{"Origin",-23}{"Destination",-23}{"Expected Departure/Arrival Time",-31}");
+        foreach (Flight i in FlightDict.Values)
+        {
+            if ($"{i.FlightNumber[0]}" + $"{i.FlightNumber[1]}" == airlinecode)
+            {
+                Console.WriteLine($"{i.FlightNumber,-16}{selectAirline.Name,-23}{i.Origin,-23}{i.Destination,-23}{i.ExpectedTime,-31}");
+            }
+        }
+        Console.Write("Select a flight number: ");
+        string selectedflightnum = Console.ReadLine().ToUpper();
+        if (string.IsNullOrEmpty(selectedflightnum) || !FlightDict.ContainsKey(selectedflightnum))
+        {
+            Console.WriteLine("Invalid Input!");
+        }
+        else
+        {
+            if (BoardingGateStatusDict.FirstOrDefault(x => x.Value == selectedflightnum).Key == null)
+            {
+                Console.WriteLine($"{"Flight Number",-16}{"Airline Name",-23}{"Origin",-23}{"Destination",-21}{"Expected Departure/Arrival Time",-34}{"Special Request",-18}{"Boarding Gate",-13}");
+                Console.WriteLine($"{selectedflightnum,-16}{selectAirline.Name,-23}{FlightDict[selectedflightnum].Origin,-23}{FlightDict[selectedflightnum].Destination,-21}{FlightDict[selectedflightnum].ExpectedTime,-34}{FlightRequestCode[selectedflightnum],-18}{"Not Assigned",-13}");
+            }
+            else
+            {
+                Console.WriteLine($"{"Flight Number",-16}{"Airline Name",-23}{"Origin",-23}{"Destination",-21}{"Expected Departure/Arrival Time",-34}{"Special Request",-18}{"Boarding Gate",-13}");
+                Console.WriteLine($"{selectedflightnum,-16}{selectAirline.Name,-23}{FlightDict[selectedflightnum].Origin,-23}{FlightDict[selectedflightnum].Destination,-21}{FlightDict[selectedflightnum].ExpectedTime,-34}{FlightRequestCode[selectedflightnum],-18}{BoardingGateStatusDict.FirstOrDefault(x => x.Value == selectedflightnum).Key,-13}");
+            }
+        }
+    }
+    else
+    {
+        Console.WriteLine("Invalid Input!");
+    }
+}
