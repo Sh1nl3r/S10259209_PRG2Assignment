@@ -700,11 +700,66 @@ void option7()
 
 }
 
+// Advance Feature 1
+void option8()
+{
+    Queue<string> unassignedFlights = new Queue<string>();
+    int totalFlights = FlightDict.Count;
+    int totalGates = BoardingGateDict.Count;
+    int asFlight = BoardingGateStatusDict.Count;
+    int asGate = BoardingGateStatusDict.Values.Distinct().Count();
 
+    foreach (var flight in FlightDict.Keys)
+    {
+        if (!BoardingGateStatusDict.ContainsValue(flight))
+        {
+            unassignedFlights.Enqueue(flight);
+        }
+    }
+    Console.WriteLine($"Total Unassigned Flights: {unassignedFlights.Count}");
 
+    List<string> availGate = new List<string>();
+    foreach (var gate in BoardingGateDict.Keys)
+    {
+        if (!BoardingGateStatusDict.ContainsKey(gate))
+        {
+            availGate.Add(gate);
+        }
+    }
+    Console.WriteLine($"Total Unassigned Boarding Gates: {availGate.Count}");
 
+    int flightsAssign = 0;
+    while (unassignedFlights.Count > 0 && availGate.Count > 0)
+    {
+        string flightNumber = unassignedFlights.Dequeue();
 
+        Flight flight = FlightDict[flightNumber];
+        string assignedGate = null;
+        foreach (var gate in availGate)
+        {
+            if (flight is LWTTFlight && BoardingGateDict[gate].SupportsLWTT || flight is DDJBFlight && BoardingGateDict[gate].SupportsDDJB || flight is CFFTFlight && BoardingGateDict[gate].SupportsCFFT || flight is NORMFlight)
+            {
+                assignedGate = gate;
+                break;
+            }
+        }
+        if (assignedGate != null)
+        {
+            BoardingGateStatusDict[assignedGate] = flightNumber;
+            availGate.Remove(assignedGate);
+            flightsAssign++;
+        }
+    }
+    Console.WriteLine($"Total Flights Assigned: {flightsAssign}");
 
+    int finalAsFlight = BoardingGateStatusDict.Count;
+    int finalAsGate = BoardingGateStatusDict.Values.Distinct().Count();
+    double percentageFlights = (finalAsFlight - asFlight) / (double)totalFlights * 100;
+    double percentageGates = (finalAsGate - asGate) / (double)totalGates * 100;
+
+    Console.WriteLine($"Percentage of Flights Automatically Assigned: {percentageFlights:F2}%");
+    Console.WriteLine($"Percentage of Gates Automatically Assigned: {percentageGates:F2}%");
+}
 
 //Advance Feature 2
 void option9()
@@ -757,10 +812,6 @@ void option9()
         }
     }
 }
-
-
-
-
 
 //Additional Feature 2
 void option11()
