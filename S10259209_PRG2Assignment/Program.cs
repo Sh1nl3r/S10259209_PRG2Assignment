@@ -645,3 +645,71 @@ void option11()
         Console.WriteLine("Invalid Input!");
     }
 }
+
+
+Console.WriteLine("Loading Airlines...");
+Console.WriteLine($"{AirlinesDict.Count} Airlines Loaded!");
+Console.WriteLine("Loading Boarding Gates...");
+Console.WriteLine($"{BoardingGateDict.Count} Boarding Gates Loaded!");
+Console.WriteLine("Loading Flights...");
+Console.WriteLine($"{FlightDict.Count} Flights Loaded!\n\n\n");
+
+while (true)
+{
+    displaymenu();
+    Console.Write("\nPlease select your option: ");
+    string? option = Console.ReadLine();
+    if (option == "1")
+    {
+        option1();
+    }
+    else if (option == "2")
+    {
+        option2();
+    }
+    else if (option == "3")
+    {
+        option3();
+    }
+    else if (option == "4")
+    {
+        option4();
+    }
+    else if (option == "5")
+    {
+        option5();
+    }
+    else if (option == "6")
+    {
+        option6();
+    }
+    else if (option == "7")
+    {
+        option7();
+    }
+    else if (option == "8")
+    {
+        option8();
+    }
+    else if (option == "9")
+    {
+        option9();
+    }
+    else if (option == "10")
+    {
+        option10();
+    }
+    else if (option == "11")
+    {
+        option11();
+    }
+    else if (option == "0")
+    {
+        Console.WriteLine("GoodBye!");
+        break;
+    }
+    else
+    {
+        Console.WriteLine("Invalid Input! Please try again!");
+    }
+}
