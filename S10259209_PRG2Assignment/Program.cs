@@ -678,6 +678,28 @@ void option6()
     }
 }
 
+// Feature 9
+void option7()
+{
+    Console.WriteLine("=============================================");
+    Console.WriteLine("Flight Schedule for Changi Airport Terminal 5");
+    Console.WriteLine("=============================================");
+    Console.WriteLine($"{"Flight Number",-16}{"Airline Name",-23}{"Origin",-23}{"Destination",-23}{"Expected Departure/Arrival Time",-35}{"Status",-16}{"Boarding Gate"}");
+    List<KeyValuePair<string, Flight>> sortedByTime = FlightDict.OrderBy(x => x.Value.ExpectedTime).ToList();
+    foreach (var i in sortedByTime)
+    {
+        if (BoardingGateStatusDict.ContainsValue(i.Value.FlightNumber))
+        {
+            Console.WriteLine($"{i.Value.FlightNumber,-16}{AirlinesDict[$"{i.Value.FlightNumber[0]}" + $"{i.Value.FlightNumber[1]}"].Name,-23}{i.Value.Origin,-23}{i.Value.Destination,-23}{i.Value.ExpectedTime,-35}{i.Value.Status,-16}{BoardingGateStatusDict.FirstOrDefault(x => x.Value == i.Value.FlightNumber).Key}");
+        }
+        else
+        {
+            Console.WriteLine($"{i.Value.FlightNumber,-16}{AirlinesDict[$"{i.Value.FlightNumber[0]}" + $"{i.Value.FlightNumber[1]}"].Name,-23}{i.Value.Origin,-23}{i.Value.Destination,-23}{i.Value.ExpectedTime,-35}{i.Value.Status,-16}{"Not Assigned"}");
+        }
+    }
+
+}
+
 
 
 
