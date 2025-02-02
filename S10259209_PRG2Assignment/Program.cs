@@ -436,3 +436,61 @@ void option6()
         Console.WriteLine("The airline code does not exist.");
     }
 }
+
+
+
+
+
+
+
+//Advance Feature 2
+void option9()
+{
+    if (BoardingGateStatusDict.Count != FlightDict.Count)
+    {
+        Console.WriteLine("Some Flights has not been assigned a boarding gate.");
+    }
+    else
+    {
+        foreach (Airline airline in AirlinesDict.Values)
+        {
+            double totalFees = 0.0;
+            double feetodeduct = 0.0;
+            int numofflights = 0;
+            foreach (Flight flight in FlightDict.Values)
+            {
+                if ($"{flight.FlightNumber[0]}" + $"{flight.FlightNumber[1]}" == airline.Code)
+                {
+                    totalFees = totalFees + flight.CalculateFees() + 300;
+                    DateTime before11 = DateTime.Today.AddHours(11);
+                    DateTime after9 = DateTime.Today.AddHours(21);
+                    if (flight.ExpectedTime < before11 && flight.ExpectedTime > after9)
+                    {
+                        feetodeduct += 110.00;
+                    }
+                    if (flight.Origin == "Dubai (DXB)" || flight.Origin == "Bangkok (BKK)" || flight.Origin == "Tokyo (NRT)")
+                    {
+                        feetodeduct += 25;
+                    }
+                    if (flight.Status == "")
+                    {
+                        feetodeduct += 50;
+                    }
+                    numofflights++;
+                }
+            }
+
+            if (numofflights > 5)
+            {
+                totalFees *= 0.97;
+            }
+            totalFees -= feetodeduct;
+            if (numofflights >= 3)
+            {
+                totalFees = totalFees - ((numofflights % 3) * 350);
+            }
+            Console.WriteLine($"Total Fees for {airline.Name}: ${totalFees:N}");
+
+        }
+    }
+}
